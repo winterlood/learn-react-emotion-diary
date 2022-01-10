@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "winterlood-udemy-project",
+    "public": "build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
