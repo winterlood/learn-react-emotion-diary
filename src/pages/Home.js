@@ -37,19 +37,17 @@ const Home = () => {
       setData(
         diaryList.filter((it) => firstDay <= it.date && it.date <= lastDay)
       );
+    } else {
+      setData([]);
     }
   }, [diaryList, curDate]);
 
   const increaseMonth = () => {
-    setCurDate(
-      new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate())
-    );
+    setCurDate(new Date(curDate.getFullYear(), curDate.getMonth() + 1));
   };
 
   const decreaseMonth = () => {
-    setCurDate(
-      new Date(curDate.getFullYear(), curDate.getMonth() - 1, curDate.getDate())
-    );
+    setCurDate(new Date(curDate.getFullYear(), curDate.getMonth() - 1));
   };
 
   return (
