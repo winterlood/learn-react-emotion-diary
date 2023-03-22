@@ -1,6 +1,5 @@
-import { useState, useRef, useContext, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { DiaryDispatchContext } from "./../App.js";
 
 import MyHeader from "./MyHeader";
 import MyButton from "./MyButton";
@@ -8,17 +7,20 @@ import EmotionItem from "./EmotionItem";
 
 import { getStringDate } from "../util/date.js";
 import { emotionList } from "../util/emotion.js";
+import { useDispatch } from "react-redux";
+import { createItem, updateItem, deleteItem } from "../store/diarySlice.js";
 
 const env = process.env;
 env.PUBLIC_URL = env.PUBLIC_URL || "";
 
 const DiaryEditor = ({ isEdit, originData }) => {
+  const dispatch = useDispatch();
+
   const contentRef = useRef();
   const [content, setContent] = useState("");
   const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
 
-  const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
   const handleClickEmote = useCallback((emotion) => {
     setEmotion(emotion);
   }, []);
@@ -35,9 +37,22 @@ const DiaryEditor = ({ isEdit, originData }) => {
       )
     ) {
       if (!isEdit) {
-        onCreate(date, content, emotion);
+        dispatch(
+          createItem({
+            date,
+            content,
+            emotion,
+          })
+        );
       } else {
-        onEdit(originData.id, date, content, emotion);
+        dispatch(
+          updateItem({
+            id: originData.id,
+            date,
+            content,
+            emotion,
+          })
+        );
       }
     }
 
@@ -46,7 +61,11 @@ const DiaryEditor = ({ isEdit, originData }) => {
 
   const handleRemove = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
-      onRemove(originData.id);
+      dispatch(
+        deleteItem({
+          id: originData.id,
+        })
+      );
       navigate("/", { replace: true });
     }
   };

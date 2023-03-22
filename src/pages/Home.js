@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { DiaryStateContext } from "../App";
+import { useEffect, useState } from "react";
 
 import MyHeader from "./../components/MyHeader";
 import MyButton from "./../components/MyButton";
 import DiaryList from "./../components/DiaryList";
+import { useSelector } from "react-redux";
 
 const Home = () => {
-  const diaryList = useContext(DiaryStateContext);
+  const diary = useSelector((state) => state.diary);
 
   const [data, setData] = useState([]);
   const [curDate, setCurDate] = useState(new Date());
@@ -18,7 +18,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (diaryList.length >= 1) {
+    if (diary.length >= 1) {
       const firstDay = new Date(
         curDate.getFullYear(),
         curDate.getMonth(),
@@ -34,13 +34,11 @@ const Home = () => {
         59
       ).getTime();
 
-      setData(
-        diaryList.filter((it) => firstDay <= it.date && it.date <= lastDay)
-      );
+      setData(diary.filter((it) => firstDay <= it.date && it.date <= lastDay));
     } else {
       setData([]);
     }
-  }, [diaryList, curDate]);
+  }, [diary, curDate]);
 
   const increaseMonth = () => {
     setCurDate(new Date(curDate.getFullYear(), curDate.getMonth() + 1));
@@ -57,7 +55,7 @@ const Home = () => {
         leftChild={<MyButton text={"<"} onClick={decreaseMonth} />}
         rightChild={<MyButton text={">"} onClick={increaseMonth} />}
       />
-      <DiaryList diaryList={data} />
+      <DiaryList diary={data} />
     </div>
   );
 };

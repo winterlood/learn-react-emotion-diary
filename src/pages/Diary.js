@@ -1,15 +1,16 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { DiaryStateContext } from "../App";
 import { getStringDate } from "../util/date";
 import { emotionList } from "../util/emotion";
 
 import MyHeader from "../components/MyHeader";
 import MyButton from "../components/MyButton";
+import { useSelector } from "react-redux";
 
 const Diary = () => {
   const { id } = useParams();
-  const diaryList = useContext(DiaryStateContext);
+
+  const diary = useSelector((state) => state.diary);
   const navigate = useNavigate();
   const [data, setData] = useState();
 
@@ -19,10 +20,8 @@ const Diary = () => {
   }, []);
 
   useEffect(() => {
-    if (diaryList.length >= 1) {
-      const targetDiary = diaryList.find(
-        (it) => parseInt(it.id) === parseInt(id)
-      );
+    if (diary.length >= 1) {
+      const targetDiary = diary.find((it) => parseInt(it.id) === parseInt(id));
 
       if (targetDiary) {
         // 일기가 존재할 때
@@ -33,7 +32,7 @@ const Diary = () => {
         navigate("/", { replace: true });
       }
     }
-  }, [id, diaryList]);
+  }, [id, diary]);
 
   if (!data) {
     return <div className="DiaryPage">로딩중입니다...</div>;
@@ -41,7 +40,6 @@ const Diary = () => {
     const curEmotionData = emotionList.find(
       (it) => parseInt(it.emotion_id) === parseInt(data.emotion)
     );
-    console.log(curEmotionData);
 
     return (
       <div className="DiaryPage">

@@ -30,7 +30,7 @@ const ControlMenu = React.memo(({ value, onChange, optionList }) => {
   );
 });
 
-const DiaryList = ({ diaryList }) => {
+const DiaryList = ({ diary }) => {
   const navigate = useNavigate();
   const [sortType, setSortType] = useState("latest");
   const [filter, setFilter] = useState("all");
@@ -52,7 +52,7 @@ const DiaryList = ({ diaryList }) => {
       }
     };
 
-    const copyList = JSON.parse(JSON.stringify(diaryList));
+    const copyList = JSON.parse(JSON.stringify(diary));
     const filteredList =
       filter === "all" ? copyList : copyList.filter((it) => filterCallBack(it));
 
@@ -92,7 +92,7 @@ const DiaryList = ({ diaryList }) => {
 };
 
 DiaryList.defaultProps = {
-  diaryList: [],
+  diary: [],
 };
 
 export default DiaryList;
